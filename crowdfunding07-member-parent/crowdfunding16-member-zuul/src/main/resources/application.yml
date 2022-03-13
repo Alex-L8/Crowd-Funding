@@ -1,0 +1,37 @@
+server:
+  port: 80
+spring:
+  application:
+    name: lcx-crowd-zuul
+  redis:
+    host: 192.168.200.130
+  session:
+    store-type: redis
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka/
+zuul:
+  ignored-services: "*"     # 忽略原本微服务名称
+  sensitive-headers: "*"    # 在Zuul向其它微服务重定向时保持原本头信息(请求头、响应头)
+  routes:
+    crowd-portal:
+      service-id: lcx-crowd-auth
+      path: /**
+    crowd-project:
+      service-id: lcx-crowd-project
+      path: /project/**
+    crowd-order:
+      service-id: lcx-crowd-order
+      path: /order/**
+    crowd-pay:
+      service-id: lcx-crowd-pay
+      path: /pay/**
+#设置ribbon的超时时间，防止zuul和feign在底层使用ribbon通过微服务名称调用eureka时在正常情况下显示超时
+#在第一请求中需要建立缓存、建立连接,操作较多，所以比较耗时。如果按照ribbon超时时间来工作，第一次请求会超过这个时间导致
+#超时报错,为了避免这个问题，将ribbon的超时时间延长。
+ribbon:
+  ReadTimeout: 10000
+  ConnectionTimeout: 10000
+

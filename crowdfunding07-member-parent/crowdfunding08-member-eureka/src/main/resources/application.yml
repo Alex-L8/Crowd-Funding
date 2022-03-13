@@ -1,0 +1,17 @@
+server:
+  port: 1000
+
+spring:
+  application:
+    name: lcx-crowd-eureka
+#  cloud:
+#    inetutils:
+#      timeout-seconds: 10
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false   #自己就是注册中心，所以自己不注册自己
+    fetch-registry: false         #自己就是注册中心，所以不需要从注册中心取回信息系
+    service-url:                  #客户端（指consumer、provider）访问当前注册中心时使用的地址
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

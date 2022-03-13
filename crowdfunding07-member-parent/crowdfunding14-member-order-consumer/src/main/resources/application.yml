@@ -1,0 +1,27 @@
+server:
+  port: 6000
+
+spring:
+  application:
+    name: lcx-crowd-order
+  redis:
+    host: 192.168.200.130
+  session:
+    store-type: redis
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka/
+
+#aliyun:
+#  oss:
+#    bucket-domain: http://lcx666.oss-cn-guangzhou.aliyuncs.com
+#    bucket-name: lcx666
+#    end-point: http://oss-cn-guangzhou.aliyuncs.com
+#    access-key-id: LTAI5tRvLidde5DmgtwWCeZF
+#    access-key-secret: tuar9FHD4KKxM6528iEroHOK5TsBAv
+

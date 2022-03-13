@@ -1,0 +1,32 @@
+server:
+  port: 4000
+spring:
+  application:
+    name: lcx-crowd-auth
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  redis:
+    host: 192.168.200.130
+  session:
+    store-type: redis
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka/
+
+# 发短信的第三方接口配置信息
+short:
+  message:
+    host: https://dfsns.market.alicloudapi.com
+    path: /data/send_sms
+    method: POST
+    app-code: b2a844e3a0ec4874bcb2ab651d0c8fad
+    template-id: TPL_0000
+#设置ribbon的超时时间，防止zuul和feign在底层使用ribbon通过微服务名称调用eureka时在正常情况下显示超时
+#redis在第一次创建key时需要缓存，时间比后续操作要长
+ribbon:
+  ReadTimeout: 10000
+  ConnectionTimeout: 10000
+
