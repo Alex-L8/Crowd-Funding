@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--扫描包:handler-->
+    <context:component-scan base-package="lcx.mvc"/>
+
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--注解驱动-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <!-- 处理响应中文内容乱码 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="defaultCharset" value="UTF-8" />
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html</value>
+                        <value>application/json</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--开放对静态资源的访问-->
+    <mvc:default-servlet-handler />
+
+    <!--配置基于xml的异常映射-->
+    <bean id="simpleMappingExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!-- 配置异常类型和具体视图页面对应关系 -->
+        <property name="exceptionMappings">
+            <props>
+                <!-- key属性指定异常全类名，标签体中指定对应的视图(前后缀拼接) -->
+                <prop key="java.lang.Exception">system-error</prop>
+<!--                <prop key="com.atguigu.crowd.exception.AccessForbiddenException">admin-login</prop>-->
+            </props>
+        </property>
+    </bean>
+
+
+
+
+    <!--注册拦截器-->
+    <!--<mvc:interceptors>
+        <mvc:interceptor>
+            &lt;!&ndash;配置要拦截的资源&ndash;&gt;
+            <mvc:mapping path="/**"/>
+            &lt;!&ndash;配置不拦截的资源&ndash;&gt;
+            <mvc:exclude-mapping path="/admin/to/login/page.html"/>
+            <mvc:exclude-mapping path="/admin/do/login.html"/>
+            <mvc:exclude-mapping path="/admin/do/logout.html"/>
+            <bean class="lcx.mvc.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+
+    <!--控制器方法, 这里仅实现页面跳转的功能-->
+    <mvc:view-controller path="/admin/to/login/page.html" view-name="admin-login"></mvc:view-controller>
+    <mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"></mvc:view-controller>
+    <mvc:view-controller path="/admin/to/add/page.html" view-name="admin-add"></mvc:view-controller>
+    <mvc:view-controller path="/role/to/page.html" view-name="role-page"></mvc:view-controller>
+    <!-- 前往菜单维护页面 -->
+    <mvc:view-controller path="/menu/to/page.html" view-name="menu-page"/>
+</beans>

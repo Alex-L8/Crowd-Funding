@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--引入properties文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--数据源配置-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+    </bean>
+
+    <!--配置SqlSessionFactory（设置mybatis配置文件的路径、mapper.xml文件的路径、注入数据源）-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+
+        <!-- 引入 pageHelper插件 -->
+        <!--注意这里要写成PageInterceptor, 5.0之前的版本都是写PageHelper, 5.0之后要换成PageInterceptor-->
+        <property name="plugins">
+            <array>
+                <bean  class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+
+                            <!--reasonable：分页合理化参数，默认值为false,直接根据参数进行查询。当该参数设置为 true 时，
+                    pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页。-->
+                            reasonable=true
+                        </value>
+                    </property>
+
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--配置与mapper.xml对应的mapper接口的包路径-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="lcx.mapper"/>
+    </bean>
+</beans>
