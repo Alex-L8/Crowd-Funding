@@ -18,12 +18,14 @@
 2. SpringBoot
 3. SpringSecurity
 4. SpringCloud
+5. Redis
 
 **前端**
 
 1. Bootstrap
 2. zTree
 3. layer
+4. Ajax
 
 **外部**
 
